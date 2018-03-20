@@ -1,16 +1,9 @@
 ﻿#端口
 server: 
-  port: 8998
+  port: 8990
   tomcat: 
     uri-encoding: UTF-8
 spring:
-#  application:
-#    name: client
-  thymeleaf:
-      prefix: classpath:/templates
-      encoding: UTF-8
-  #缓存
-      cache: false
 #表示所有的访问都经过静态资源路径；
   mvc:
     static-path-pattern: /**

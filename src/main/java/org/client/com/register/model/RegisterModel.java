@@ -27,7 +27,7 @@ public class RegisterModel implements Serializable {
     @Size(min = 8, max = 16, message = "第二次密码长度为8-16")
     private String password2;
 
-//    @NotBlank(message = "验证码不能为空")
+    //    @NotBlank(message = "验证码不能为空")
 //    @Size(min = 8, max = 16, message = "验证码长度为8-16")
     private String yzm;
 
@@ -63,7 +63,6 @@ public class RegisterModel implements Serializable {
 
     public void setPassword2(String password2) {
         this.password2 = Base64Util.encode(password2);
-        ;
     }
 
     public String getYzm() {
