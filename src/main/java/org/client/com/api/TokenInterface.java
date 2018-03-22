@@ -14,7 +14,6 @@ public interface TokenInterface {
     ResponseResult<TokenModel> add(@Param("model") TokenModel model);
 
     @RequestLine("POST /token/updateToken")
-//    @Body("a={a}&b={b}")// post 提交
     @Body("token={token}")
     ResponseResult<TokenModel> updateToken(@Param("token") String token);
 
