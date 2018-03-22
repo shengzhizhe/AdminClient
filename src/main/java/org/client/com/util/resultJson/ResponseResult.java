@@ -22,7 +22,11 @@ public class ResponseResult<Object> {
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        try {
+            this.message = new String(message.getBytes("UTF-8"), "UTF-8");
+        } catch (Exception e) {
+            this.message = message;
+        }
     }
 
     public Object getData() {

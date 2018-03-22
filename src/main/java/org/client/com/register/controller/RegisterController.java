@@ -28,15 +28,11 @@ public class RegisterController {
                                                   BindingResult bindingResult) {
         try {
             SecurityUtils.getSubject().getSession().setAttribute("message", "");
-            //数据验证
             if (bindingResult.hasErrors()) {
-//                重定向传参
-//                SecurityUtils.getSubject().getSession().setAttribute("message", bindingResult.getFieldError().getDefaultMessage());
                 return new ResponseResult<>(false, bindingResult.getFieldError().getDefaultMessage(), 402);
             }
 //两次输入的密码是否一至
             if (!model.isPass()) {
-//                SecurityUtils.getSubject().getSession().setAttribute("message", "两次输入的密码不一致");
                 return new ResponseResult<>(false, "两次输入的密码不一致", 402);
             }
 
@@ -55,7 +51,7 @@ public class RegisterController {
                 return new ResponseResult<>(false, result.getCode() == 501 ? "该账户已注册" : result.getMessage(), 402);
             }
         } catch (FeignException f) {
-            return new ResponseResult<>(false, "服务链接异常", 500);
+            return new ResponseResult<>(false, "服务链接超时", 500);
         }
     }
 
