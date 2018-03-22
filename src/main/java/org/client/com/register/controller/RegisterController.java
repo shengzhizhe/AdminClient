@@ -5,9 +5,9 @@ import org.apache.shiro.SecurityUtils;
 import org.client.com.api.AccountInterface;
 import org.client.com.api.model.AccountModel;
 import org.client.com.register.model.RegisterModel;
-import org.client.com.util.redirect.RedirectUtil;
 import org.client.com.util.resultJson.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +23,11 @@ public class RegisterController {
     @Autowired
     private AccountInterface anInterface;
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult<RegisterModel> register(@Valid @RequestBody RegisterModel model,
                                                   BindingResult bindingResult) {
         try {
             SecurityUtils.getSubject().getSession().setAttribute("message", "");
-            RedirectUtil redirectUtil = new RedirectUtil();
             //数据验证
             if (bindingResult.hasErrors()) {
 //                重定向传参
