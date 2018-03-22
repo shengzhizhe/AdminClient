@@ -23,7 +23,10 @@ public class RegisterController {
     @Autowired
     private AccountInterface anInterface;
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/register",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult<RegisterModel> register(@Valid @RequestBody RegisterModel model,
                                                   BindingResult bindingResult) {
         try {
