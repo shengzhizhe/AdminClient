@@ -11,6 +11,7 @@ public interface TokenInterface {
 
     @Headers("Content-Type: application/json")
     @RequestLine("POST /token/token")
+    @Body("model={model}")
     ResponseResult<TokenModel> add(@Param("model") TokenModel model);
 
     @RequestLine("POST /token/updateToken")

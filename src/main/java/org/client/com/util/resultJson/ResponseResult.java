@@ -52,6 +52,12 @@ public class ResponseResult<Object> {
         this.code = code;
     }
 
+    public ResponseResult(boolean success, String message, int code) {
+        this.success = success;
+        this.message = message;
+        this.code = code;
+    }
+
     @Override
     public String toString() {
         return "ResponseResult{" +

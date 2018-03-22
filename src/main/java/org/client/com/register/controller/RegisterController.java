@@ -9,11 +9,10 @@ import org.client.com.util.redirect.RedirectUtil;
 import org.client.com.util.resultJson.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -23,29 +22,23 @@ public class RegisterController {
 
     @Autowired
     private AccountInterface anInterface;
-    @Autowired
-    private ResponseResult result;
-
-    @RequestMapping(value = "/toRegister")
-    public ModelAndView init() {
-        return new ModelAndView("/register");
-    }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView register(@Valid @ModelAttribute("form") RegisterModel model,
-                                 BindingResult bindingResult) {
+    public ResponseResult<RegisterModel> register(@Valid @RequestBody RegisterModel model,
+                                                  BindingResult bindingResult) {
         try {
             SecurityUtils.getSubject().getSession().setAttribute("message", "");
             RedirectUtil redirectUtil = new RedirectUtil();
             //数据验证
             if (bindingResult.hasErrors()) {
-                SecurityUtils.getSubject().getSession().setAttribute("message", bindingResult.getFieldError().getDefaultMessage());
-                return new ModelAndView(redirectUtil.getRedirect() + "/register/toRegister");
+//                重定向传参
+//                SecurityUtils.getSubject().getSession().setAttribute("message", bindingResult.getFieldError().getDefaultMessage());
+                return new ResponseResult<>(false, bindingResult.getFieldError().getDefaultMessage(), 402);
             }
 //两次输入的密码是否一至
             if (!model.isPass()) {
-                SecurityUtils.getSubject().getSession().setAttribute("message", "两次输入的密码不一致");
-                return new ModelAndView(redirectUtil.getRedirect() + "/register/toRegister");
+//                SecurityUtils.getSubject().getSession().setAttribute("message", "两次输入的密码不一致");
+                return new ResponseResult<>(false, "两次输入的密码不一致", 402);
             }
 
             AccountModel accountModel = new AccountModel();
@@ -56,19 +49,15 @@ public class RegisterController {
 
             ResponseResult result = anInterface.register(accountModel);
             if (result.isSuccess())
-                return new ModelAndView(redirectUtil.getRedirect() + "/register/registerOK");
+                return new ResponseResult<>(true, null, 200);
             else {
                 SecurityUtils.getSubject().getSession().setAttribute("message",
                         result.getCode() == 501 ? "该账户已注册" : result.getMessage());
-                return new ModelAndView(redirectUtil.getRedirect() + "/register/toRegister");
+                return new ResponseResult<>(false, result.getCode() == 501 ? "该账户已注册" : result.getMessage(), 402);
             }
         } catch (FeignException f) {
-            return new ModelAndView("").addObject("服务断开");
+            return new ResponseResult<>(false, "服务链接异常", 500);
         }
     }
 
-    @RequestMapping(value = "/registerOK", method = RequestMethod.GET)
-    public ModelAndView registerOK() {
-        return new ModelAndView("/registerOK");
-    }
 }
